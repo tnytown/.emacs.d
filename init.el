@@ -26,7 +26,7 @@
 		  (let* ((attrs (cdr x))
 				 (path (car x))
 				 (isdir (eq (file-attribute-type attrs) 't))) ;; symlinks are truthy too
-			(load path))) (directory-files-and-attributes dir 't ".*\\.el")))
+			(load path))) (directory-files-and-attributes dir 't ".*\\.el$")))
 
 ;; (M)ELPA configuration
 (require 'package)
