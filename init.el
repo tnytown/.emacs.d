@@ -1,5 +1,3 @@
-(require 'cl-lib)
-
 ;; TODO: remove
 (setq gc-cons-threshold 100000000)
 
@@ -22,24 +20,13 @@
 ;; transparent titlebar?
 (add-to-list 'default-frame-alist '(ns-transparent-titlebar . t))
 
-;; recursively load configs
-(defun load-directory (directory)
-  (dolist (element (directory-files-and-attributes directory nil nil nil))
-    (let* ((path (car element))
-           (fullpath (concat directory "/" path))
-           (isdir (car (cdr element)))
-           (ignore-dir (or (string= path ".") (string= path ".."))))
-      (cond
-       ((and (eq isdir t) (not ignore-dir))
-        (load-directory fullpath))
-       ((and (eq isdir nil) (string= (substring path -3) ".el"))
-        (load (file-name-sans-extension fullpath)))))))
-
-;; add locallisppath manually
-;; (let ((default-directory "/usr/local/share/emacs/site-lisp"))
-;;  (normal-top-level-add-subdirs-to-load-path))
-
-;; (setq load-path (cl-union load-path (list "/usr/local/share/emacs/site-lisp")))
+(defun aptny/load-directory (dir)
+  "Load all elisp files in `DIR'."
+  (mapc (lambda (x)
+		  (let* ((attrs (cdr x))
+				 (path (car x))
+				 (isdir (eq (file-attribute-type attrs) 't))) ;; symlinks are truthy too
+			(load path))) (directory-files-and-attributes dir 't ".*\\.el")))
 
 ;; (M)ELPA configuration
 (require 'package)
@@ -61,5 +48,5 @@
 (load custom-file)
 
 ;; Bootstrap configuration
-(load-directory "~/.emacs.d/config")
+(aptny/load-directory "~/.emacs.d/config")
 (put 'dired-find-alternate-file 'disabled nil)
