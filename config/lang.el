@@ -1,4 +1,3 @@
-
 (require 'use-package)
 (require 're-builder)
 (setq reb-re-syntax 'string)
@@ -12,6 +11,7 @@
 ;; indentation
 (setq-default c-basic-offset 4)
 (setq-default tab-width 4)
+(setq-default indent-tabs-mode nil)
 
 (use-package direnv :ensure t
   :config
@@ -19,8 +19,8 @@
 
 (use-package exec-path-from-shell :ensure t
   :config
-  (setenv "SHELL" "/bin/zsh")
-  (setq shell-file-name "/bin/zsh")
+  ;; (setenv "SHELL" "/usr/bin/env zsh")
+  ;; (setq shell-file-name "/bin/zsh")
   (exec-path-from-shell-initialize)
   (exec-path-from-shell-copy-envs
    '("PATH")))
