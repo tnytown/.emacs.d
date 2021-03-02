@@ -48,6 +48,9 @@
 ;;  (setq ivy-use-virtual-buffers t
 ;;	ivy-count-format "%d/%d "))
 
+(use-package ws-butler :ensure t)
+(add-hook 'prog-mode-hook #'ws-butler-mode)
+
 (use-package elcord :ensure t
   :diminish elcord-mode
   :init (setq elcord-use-major-mode-as-main-icon 't) ;; bad defaults
