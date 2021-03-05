@@ -64,13 +64,19 @@
 		 (ts (car (seq-filter
 				(lambda (x) (string= (car x) "timestamps")) deets)))
 		 (activity (list
-					(cons "details" (projectile-project-name))
+					(cons "details" (if (projectile-project-p) (projectile-project-name) "No project"))
 					(cons "state" (format "Editing %s" (buffer-name))))))
     
-	(when ts (push ts activity))
+	;;(when ts (push ts activity))
+	(let* ((now (string-to-number (format-time-string "%s" (current-time))))
+		   (tsp (list "timestamps" (cons "start" now) (cons "end" now)))) (push tsp activity))
 	activity
   ))
 (advice-add 'elcord--details-and-state :around #'aptny/elcord-details)
+(defun elcsp ()
+  "Shorthand for `elcord--set-presence'."
+  (interactive)
+  (elcord--set-presence))
 
 (fset 'dekauffmanize
    [?\C-s ?| return ?\C-b ?\C-  ?\C-s ?` return ?\C-p ?\C-x ?r ?k])
@@ -106,3 +112,8 @@
 
 (global-set-key [?\d] 'aptny/backspace-whitespace-to-tab-stop)
 (setq-default electric-indent-inhibit t)
+
+(add-function :after after-focus-change-function (lambda () (save-some-buffers 't)))
+
+(provide 'qol)
+;;; qol.el ends here
