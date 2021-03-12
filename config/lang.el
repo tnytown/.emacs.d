@@ -17,13 +17,14 @@
   :config
   (direnv-mode))
 
-(use-package exec-path-from-shell :ensure t
+(when nil
+  (use-package exec-path-from-shell :ensure t
   :config
   ;; (setenv "SHELL" "/usr/bin/env zsh")
   ;; (setq shell-file-name "/bin/zsh")
   (exec-path-from-shell-initialize)
   (exec-path-from-shell-copy-envs
-   '("PATH")))
+   '("PATH"))))
 
 (use-package flycheck :ensure t
   :init
@@ -47,13 +48,16 @@
   :hook (web-mode . lsp)
   :hook (typescript-mode . lsp)
   :init
-  (setq lsp-diagnostic-package :flycheck
+  (progn
+    (setq lsp-diagnostic-package :flycheck
 ;;		lsp-rust-server 'rust-analyzer
 		lsp-rust-analyzer-cargo-load-out-dirs-from-check t
 		lsp-rust-analyzer-proc-macro-enable t
-		read-process-output-max (* 1024 1024)
-		lsp-clients-clangd-executable "/usr/bin/xcrun"
-		lsp-clients-clangd-args '("clangd" "-compile-commands-dir=build")))
+		read-process-output-max (* 1024 1024)))
+  (when (eq system-type 'darwin)
+    (setq lsp-clients-clangd-executable "/usr/bin/xcrun"
+          lsp-clients-clangd-args
+          '("clangd" "-compile-commands-dir=build"))))
 
 (use-package lsp-ui :ensure t :commands lsp-ui-mode
   :disabled
@@ -134,6 +138,10 @@
 (use-package editorconfig :ensure t
   :config
   (editorconfig-mode 1))
+
+(use-package clang-format+ :ensure t
+  :hook (c++-mode . clang-format+-mode)
+  :hook (c-mode . clang-format+-mode))
 
 ;; python
 (use-package pyvenv :ensure t)
