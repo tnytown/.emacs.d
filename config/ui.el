@@ -41,6 +41,13 @@
 ;;(advice-add 'scroll-up-line :before 'my-scroll-hook)
 ;;(advice-add 'scroll-down-line :before 'my-scroll-hook)
 
+;; fonts
+(set-fontset-font "fontset-default" 'unicode "Menlo")
+(set-fontset-font "fontset-default" 'unicode "Meslo LG S" nil 'append)
+(set-fontset-font "fontset-default" 'unicode "SRC Hack" nil 'append)
+(set-fontset-font t 'symbol "Apple Color Emoji")
+(set-fontset-font t 'symbol "Noto Color Emoji" nil 'append)
+
 (use-package all-the-icons :ensure t)
 
 (defvar ap/company-box-icons-lsp
