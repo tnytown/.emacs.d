@@ -41,23 +41,33 @@
 ;; languages
 (use-package lsp-mode :ensure t :commands lsp
   :hook (rust-mode . lsp)
-  :hook (python-mode . lsp)
   :hook (c-mode . lsp)
   :hook (c++-mode . lsp)
   :hook (java-mode . lsp)
   :hook (web-mode . lsp)
   :hook (typescript-mode . lsp)
   :init
-  (progn
-    (setq lsp-diagnostic-package :flycheck
-;;		lsp-rust-server 'rust-analyzer
+  ;; (advice-add 'make-lsp-client )
+  (setq lsp-diagnostic-package :flycheck
+        ;;lsp-rust-server 'rust-analyzer
 		lsp-rust-analyzer-cargo-load-out-dirs-from-check t
 		lsp-rust-analyzer-proc-macro-enable t
-		read-process-output-max (* 1024 1024)))
+		read-process-output-max (* 1024 1024)
+        lsp-clients-clangd-args '("-compile-commands-dir=build")
+        )
   (when (eq system-type 'darwin)
     (setq lsp-clients-clangd-executable "/usr/bin/xcrun"
           lsp-clients-clangd-args
           '("clangd" "-compile-commands-dir=build"))))
+
+(use-package lsp-python-ms :ensure t
+  :hook (python-mode . (lambda ()
+                          (require 'lsp-python-ms)
+                          (lsp)))
+  :init
+  (setq lsp-python-ms-executable "python-language-server"))
+
+
 
 (use-package lsp-ui :ensure t :commands lsp-ui-mode
   :disabled
